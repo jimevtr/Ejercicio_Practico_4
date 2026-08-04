@@ -7,13 +7,13 @@ Ejecuta `database.sql` en tu servidor MySQL (por ejemplo desde MySQL Workbench o
 
 Abre `config.py` y ajusta `host`, `user`, `password` y `port` según tu instalación de MySQL.
 
-### 4. Levanta la aplicación:
+### Levanta la aplicación:
 
 ```
 python app.py
 ```
 
-5. Entra a `http://localhost:5000`.
+### Entra a `http://localhost:5000`.
 
 ## ESTRUCTURA DE LA BASE DE DATOS
 
