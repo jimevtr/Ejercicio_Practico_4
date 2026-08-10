@@ -185,8 +185,33 @@ def test(tipo):
         "plano": "documento.txt",
         "personalizado": nombre_archivo or "personalizado.txt",
     }
+    
+    contenido_bruto = texto["contenido"]
+    
+    if tipo == "codigo":
+        lineas = [l for l in contenido_bruto.splitlines() if l.strip()]
+    else:
+        # Dividir por palabras pero agrupando por límite de caracteres (ej. máximo 65-70 por línea)
+        # para evitar que los nombres largos con guiones rompan el diseño de la terminal.
+        palabras_totales = contenido_bruto.split()
+        lineas = []
+        linea_actual = []
+        caracteres_actuales = 0
+        
+        for palabra in palabras_totales:
+            # Si agregar la palabra excede el límite de la línea visual (~65 caracteres)
+            if caracteres_actuales + len(palabra) + len(linea_actual) > 65 and linea_actual:
+                lineas.append(" ".join(linea_actual))
+                linea_actual = [palabra]
+                caracteres_actuales = len(palabra)
+            else:
+                linea_actual.append(palabra)
+                caracteres_actuales += len(palabra)
+                
+        if linea_actual:
+            lineas.append(" ".join(linea_actual))
 
-    return render_template("test.html", texto=texto["contenido"], titulo=titulos[tipo])
+    return render_template("test.html", lineas_texto=lineas, titulo=titulos[tipo])
 
 
 @app.route("/guardar_resultado", methods=["POST"])
