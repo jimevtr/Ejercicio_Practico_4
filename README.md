@@ -28,6 +28,9 @@ python app.py
 3. Prueba de escritura palabra por palabra durante 60 segundos, con conteo regresivo y barra de progreso.
 4. Al terminar el tiempo (o el texto), se calculan las palabras por minuto y se guardan en `Marcador`.
 
+## Enlace de la aplicación en Railway
+
+https://mecanografia-web-production.up.railway.app/ 
 
 # ACTIVIDAD
 

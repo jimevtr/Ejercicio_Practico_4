@@ -1,13 +1,14 @@
+import os
 import pymysql
 from pymysql.cursors import DictCursor
 
-# Ajusta estos datos segun tu instalacion de MySQL
+
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "root",
-    "database": "mecanografia_db",
-    "port": 3306,
+    "host": os.getenv("MYSQLHOST", "localhost"),
+    "user": os.getenv("MYSQLUSER", "root"),
+    "password": os.getenv("MYSQLPASSWORD", "root"),
+    "database": os.getenv("MYSQLDATABASE", "mecanografia_db"),
+    "port": int(os.getenv("MYSQLPORT", "3306")),
     "cursorclass": DictCursor,
 }
 

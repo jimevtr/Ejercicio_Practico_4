@@ -1,11 +1,3 @@
--- Base de datos para la aplicacion de mecanografia
--- Ejecutar este script completo en MySQL para dejar todo listo
-
-CREATE DATABASE IF NOT EXISTS mecanografia_db
-    CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE mecanografia_db;
-
 CREATE TABLE Usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
