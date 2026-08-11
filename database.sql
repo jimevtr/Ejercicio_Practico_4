@@ -2,9 +2,10 @@ CREATE TABLE Usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     edad INT NOT NULL,
-    usuario VARCHAR(50) NOT NULL UNIQUE,
+    usuario VARCHAR(100) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
-    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+    intentos_fallidos INT DEFAULT 0,
+    bloqueado BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE Texto (

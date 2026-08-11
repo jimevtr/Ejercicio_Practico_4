@@ -48,17 +48,51 @@ def procesar_login():
     conexion = get_connection()
     try:
         with conexion.cursor() as cursor:
+            # Buscar el usuario en la base de datos
             cursor.execute("SELECT * FROM Usuario WHERE usuario = %s", (usuario,))
             fila = cursor.fetchone()
+
+            if fila:
+                # 1. Verificar si la cuenta ya está bloqueada
+                if fila.get("bloqueado"):
+                    flash("Tu cuenta ha sido bloqueada por demasiados intentos fallidos.")
+                    return redirect(url_for("login"))
+
+                # 2. Verificar si la contraseña es correcta
+                if check_password_hash(fila["contrasena"], contrasena):
+                    # Reiniciar los intentos fallidos a 0 tras un inicio de sesión exitoso
+                    cursor.execute("UPDATE Usuario SET intentos_fallidos = 0 WHERE id = %s", (fila["id"],))
+                    conexion.commit()
+
+                    # Guardar las variables de sesión e ingresar al menú principal
+                    session["usuario_id"] = fila["id"]
+                    session["usuario"] = fila["usuario"]
+                    return redirect(url_for("menu"))
+                else:
+                    # 3. La contraseña es incorrecta: Incrementar intentos
+                    intentos = fila.get("intentos_fallidos", 0) + 1
+                    bloqueado = intentos >= 4
+
+                    # Actualizar la base de datos con el nuevo número de intentos y el estado de bloqueo
+                    cursor.execute(
+                        "UPDATE Usuario SET intentos_fallidos = %s, bloqueado = %s WHERE id = %s",
+                        (intentos, bloqueado, fila["id"])
+                    )
+                    conexion.commit()
+
+                    if bloqueado:
+                        flash("Tu cuenta ha sido bloqueada tras 4 intentos fallidos.")
+                    else:
+                        flash(f"Usuario o contraseña incorrectos. (Intento {intentos}/4)")
+                        
+            else:
+                # El usuario no existe en la base de datos
+                flash("Usuario o contraseña incorrectos")
+
     finally:
+        # Asegurarse de cerrar la conexión siempre
         conexion.close()
 
-    if fila and check_password_hash(fila["contrasena"], contrasena):
-        session["usuario_id"] = fila["id"]
-        session["usuario"] = fila["usuario"]
-        return redirect(url_for("menu"))
-
-    flash("Usuario o contraseña incorrectos")
     return redirect(url_for("login"))
 
 
