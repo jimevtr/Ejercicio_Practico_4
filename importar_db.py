@@ -1,10 +1,12 @@
+import os
 import pymysql
 
-HOST = "127.0.0.1"
-PORT = 52054
-USER = "root"
-PASSWORD = "qZosrWOvXMDCckJoaTAVSbVonWHTjihh"
-DATABASE = "railway"
+# Configuración usando variables de entorno o valores por defecto para conexión externa a Railway
+HOST = os.getenv("DB_HOST", "shortline.proxy.rlwy.net")
+PORT = int(os.getenv("DB_PORT", 22937))
+USER = os.getenv("DB_USER", "root")
+PASSWORD = os.getenv("DB_PASSWORD", "qZosrWOvXMDCckJoaTAVSbVonWHTjihh")  # Configura tu contraseña en tu entorno o archivo .env
+DATABASE = os.getenv("DB_DATABASE", "railway")
 
 
 def ejecutar_sql(conexion, archivo_sql):
