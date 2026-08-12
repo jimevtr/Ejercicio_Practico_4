@@ -497,3 +497,28 @@ h1 {
     color: var(--acento);
     margin: 8px 0 24px;
 }
+
+/* Estilo base del indicador de racha (oculto por defecto) */
+.indicador-racha {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Clase que activa la animación visual */
+.indicador-racha.mostrar {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}

@@ -17,6 +17,8 @@ let intervalo = null;
 let pruebaIniciada = false;
 let pruebaTerminada = false;
 
+let rachaConsecutiva = 0; // NUEVO
+
 // Obtenemos las palabras solo de la línea que se está mostrando actualmente
 function obtenerPalabrasLineaActual() {
     if (indiceLineaActual >= lineasTexto.length) return [];
@@ -118,6 +120,17 @@ function procesarPalabra() {
         if (esCorrecta && !elementoActual.dataset.contada) {
             palabrasCorrectasTotales += 1;
             elementoActual.dataset.contada = "1";
+            
+            // --- LÓGICA DE RACHA ---
+            rachaConsecutiva += 1;
+            if (rachaConsecutiva === 4) {
+                mostrarAnimacionRacha();
+                rachaConsecutiva = 0; // Reinicia para contar las siguientes 4
+            }
+            // -----------------------
+        } else if (!esCorrecta) {
+            // Si comete un error, se rompe la racha actual
+            rachaConsecutiva = 0;
         }
     }
 
@@ -164,6 +177,19 @@ entrada.addEventListener("keydown", (evento) => {
         procesarPalabra();
     }
 });
+
+// Función para disparar la animación visual en pantalla
+function mostrarAnimacionRacha() {
+    const indicador = document.getElementById("indicador-racha");
+    if (!indicador) return;
+
+    indicador.classList.add("mostrar");
+
+    // Ocultar la animación automáticamente después de 1.5 segundos
+    setTimeout(() => {
+        indicador.classList.remove("mostrar");
+    }, 1500);
+}
 
 dibujarLineaActual();
 entrada.focus();
