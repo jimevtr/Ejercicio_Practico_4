@@ -498,17 +498,22 @@ h1 {
     margin: 8px 0 24px;
 }
 
-/* Estilo base del indicador de racha (oculto por defecto) */
+/* Contenedor principal de la terminal para que el badge respete la esquina superior derecha */
+.cuerpo-terminal {
+    position: relative;
+}
+
+/* Estilo base del indicador de racha (oculto por defecto con opacidad 0) */
 .indicador-racha {
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 20px;
     background: linear-gradient(135deg, #f59e0b, #ef4444);
     color: white;
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
     opacity: 0;
     transform: translateY(-10px) scale(0.9);
@@ -517,7 +522,7 @@ h1 {
     z-index: 10;
 }
 
-/* Clase que activa la animación visual */
+/* Clase que activa la animación y hace visible el indicador */
 .indicador-racha.mostrar {
     opacity: 1;
     transform: translateY(0) scale(1);

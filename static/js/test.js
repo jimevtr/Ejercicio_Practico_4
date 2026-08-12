@@ -98,6 +98,25 @@ function finalizarPrueba() {
     const palabrasPorMinuto = Math.round(palabrasCorrectasTotales / minutos);
 
     valorWpm.textContent = palabrasPorMinuto;
+
+    // --- LÓGICA DE SELECCIÓN DE IMAGEN ---
+    const imgVelocidad = document.getElementById("imagen-velocidad");
+    let rutaImagen = "";
+
+    if (palabrasPorMinuto > 60) {
+        rutaImagen = "../static/image/cheetah.jpg"; // Chita >60 p/m
+    } else if (palabrasPorMinuto >= 31) {
+        rutaImagen = "../static/image/liebre.png"; // Liebre 31 - 60 p/m
+    } else {
+        rutaImagen = "../static/image/caracol.png"; // Caracol <=30 p/m
+    }
+
+    if (imgVelocidad) {
+        imgVelocidad.src = rutaImagen;
+        imgVelocidad.style.display = "block";
+    }
+    // --------------------------------------
+
     pantallaResultado.classList.add("visible");
 
     fetch("/guardar_resultado", {
@@ -123,9 +142,9 @@ function procesarPalabra() {
             
             // --- LÓGICA DE RACHA ---
             rachaConsecutiva += 1;
-            if (rachaConsecutiva === 4) {
-                mostrarAnimacionRacha();
-                rachaConsecutiva = 0; // Reinicia para contar las siguientes 4
+            if (rachaConsecutiva >= 4) { // Cambiado de '===' a '>='
+                mostrarAnimacionRacha(rachaConsecutiva); 
+                // Ya no reiniciamos 'rachaConsecutiva = 0' aquí para que se acumule
             }
             // -----------------------
         } else if (!esCorrecta) {
@@ -179,14 +198,27 @@ entrada.addEventListener("keydown", (evento) => {
 });
 
 // Función para disparar la animación visual en pantalla
-function mostrarAnimacionRacha() {
+// Variable para controlar el timeout de la animación sin que se solapen
+let timeoutRacha = null;
+
+// Modificamos la función para recibir el número actual
+function mostrarAnimacionRacha(numeroRacha) {
     const indicador = document.getElementById("indicador-racha");
     if (!indicador) return;
 
+    // Actualizamos el mensaje de la interfaz con el número de racha actual
+    indicador.textContent = `🔥 ¡Racha de ${numeroRacha} palabras!`;
+
+    // Truco para reiniciar la animación CSS (Reflow)
+    indicador.classList.remove("mostrar");
+    void indicador.offsetWidth; 
     indicador.classList.add("mostrar");
 
+    // Si ya había un temporizador corriendo, lo limpiamos para que no lo oculte prematuramente
+    if (timeoutRacha) clearTimeout(timeoutRacha);
+
     // Ocultar la animación automáticamente después de 1.5 segundos
-    setTimeout(() => {
+    timeoutRacha = setTimeout(() => {
         indicador.classList.remove("mostrar");
     }, 1500);
 }
