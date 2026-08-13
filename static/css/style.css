@@ -505,7 +505,6 @@ h1 {
 
 /* Estilo base del indicador de racha (oculto por defecto con opacidad 0) */
 .indicador-racha {
-    position: absolute;
     top: 15px;
     right: 20px;
     background: linear-gradient(135deg, #f59e0b, #ef4444);
